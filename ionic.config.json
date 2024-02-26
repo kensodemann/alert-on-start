@@ -1,0 +1,7 @@
+{
+  "name": "alert-on-start",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
