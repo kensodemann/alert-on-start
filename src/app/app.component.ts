@@ -43,10 +43,19 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isReady$ = Promise.resolve()
+      .then(() => this.onReady())
       .then(() => this.onAlert())
       .catch((error) => this.onError(error))
-      .then(() => this.onReady());
+      .then(() => true);
   }
+
+  // This will fail, likely due to the DOM not being ready at the time of the alert
+  // ngOnInit(): void {
+  // this.isReady$ = Promise.resolve()
+  // .then(() => this.onAlert())
+  // .catch((error) => this.onError(error))
+  // .then(() => this.onReady());
+  // }
 
   onClick(): void {
     alert('do you always do as you are told?');

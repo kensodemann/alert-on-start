@@ -5,8 +5,17 @@ const config: CapacitorConfig = {
   appName: 'alert-on-start',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
-  }
+    androidScheme: 'https',
+  },
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+      showSpinner: false,
+      splashFullScreen: false,
+      splashImmersive: false,
+      useDialog: false,
+    },
+  },
 };
 
 export default config;
