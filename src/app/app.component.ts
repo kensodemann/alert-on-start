@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
   }
 
   onClick(): void {
-    alert('do you always do as you are told?');
+    alert('Do you always do as you are told?');
   }
 
   createAlert(options?: AlertOptions): Observable<HTMLIonAlertElement> {
@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
       return this.alert
         .create({ ...defaults, ...options })
         .then((modal) => modal.present().then(() => modal));
-      //               ^^^^^^^^^^^^^^^ - deadlock occurs here
+        //               ^^^^^^^^^^^^^^^ - deadlock occurs here
     };
     return defer(onSubscribe);
   }
@@ -88,14 +88,3 @@ export class AppComponent implements OnInit {
     console.error(error);
   }
 }
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: 'app.component.html',
-//   styleUrls: ['app.component.scss'],
-// })
-// export class AppComponent {
-//   constructor() {}
-// }
