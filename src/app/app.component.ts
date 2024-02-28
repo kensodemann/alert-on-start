@@ -43,19 +43,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isReady$ = Promise.resolve()
-      .then(() => this.onReady())
+      // uncomment the following line to dismiss the splash screen ahead of the alert and there is no problem
+      // .then(() => this.onReady())
       .then(() => this.onAlert())
       .catch((error) => this.onError(error))
+      .then(() => this.onReady())
       .then(() => true);
   }
-
-  // This will fail, likely due to the DOM not being ready at the time of the alert
-  // ngOnInit(): void {
-  // this.isReady$ = Promise.resolve()
-  // .then(() => this.onAlert())
-  // .catch((error) => this.onError(error))
-  // .then(() => this.onReady());
-  // }
 
   onClick(): void {
     alert('do you always do as you are told?');
@@ -67,10 +61,12 @@ export class AppComponent implements OnInit {
       buttons: ['Close'],
     };
     const onSubscribe = (): ObservableInput<HTMLIonAlertElement> => {
-      return this.alert
-        .create({ ...defaults, ...options })
-        .then((modal) => modal.present().then(() => modal));
-      //               ^^^^^^^^^^^^^^^ - deadlock occurs here
+      return this.alert.create({ ...defaults, ...options }).then((modal) =>
+        modal.present().then(() => {
+          alert(`alert presented`); // this is never reached on Android
+          return modal;
+        })
+      );
     };
     return defer(onSubscribe);
   }
@@ -86,6 +82,8 @@ export class AppComponent implements OnInit {
   }
 
   async onReady(): Promise<boolean> {
+    // This just provides some debugging time
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     if (Capacitor.isNativePlatform()) {
       await StatusBar.setStyle({ style: Style.Light });
       await SplashScreen.hide({ fadeOutDuration: 500 });
@@ -97,14 +95,3 @@ export class AppComponent implements OnInit {
     console.error(error);
   }
 }
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: 'app.component.html',
-//   styleUrls: ['app.component.scss'],
-// })
-// export class AppComponent {
-//   constructor() {}
-// }
